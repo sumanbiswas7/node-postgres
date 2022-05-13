@@ -7,8 +7,8 @@ const {
 } = require("./controller");
 
 router.get("/", getStudents);
+router.get("/sort", sortStudent);
 router.get("/:id", getStudentById);
-router.get("/sort_by_name", sortStudent);
 router.post("/", addStudent);
 
 module.exports = router;

@@ -56,15 +56,18 @@ const addStudent = (req, res) => {
 };
 
 const sortStudent = (req, res) => {
-  res.send("NO");
-  // pool.query("SELECT * FROM students ORDER BY name", (error, results) => {
-  //   if (error) {
-  //     res.send(error);
-  //     return;
-  //   } else {
-  //     res.status(200).send(results.rows);
-  //   }
-  // });
+  pool.query(
+    "SELECT * FROM students ORDER BY name LIMIT 10",
+    (error, results) => {
+      if (error) {
+        res.send(error);
+        return;
+      } else {
+        res.status(200).send(results.rows);
+      }
+    }
+  );
+  // " SELECT DISTINCT name FROM students "
 };
 
 module.exports = { getStudents, getStudentById, addStudent, sortStudent };
