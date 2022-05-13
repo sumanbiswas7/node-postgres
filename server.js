@@ -1,5 +1,8 @@
-const app = require("express")();
+const express = require("express");
+const app = express();
 const studentsRoute = require("./src/students/routes");
+
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send(`💡Node-Postgres Server is running at port ${PORT}`);

@@ -21,4 +21,50 @@ const getStudentById = (req, res) => {
   });
 };
 
-module.exports = { getStudents, getStudentById };
+const addStudent = (req, res) => {
+  const data = req.body;
+
+  if (!data.name || !data.age || !data.class) {
+    res.status(400).end("Student's name, age and class are required");
+    return;
+  }
+
+  pool.query(
+    "SELECT * FROM students WHERE name = $1",
+    [data.name],
+    (error, results) => {
+      if (results.rows.length) {
+        res.status(400).end("Student already exists");
+        return;
+      }
+    }
+  );
+
+  pool.query(
+    "INSERT INTO students (name,age,class) VALUES ($1,$2,$3)",
+    [data.name, data.age, data.class],
+    (error, results) => {
+      if (error) {
+        res.send(error);
+        return;
+      } else {
+        res.status(201).send("Person added sucessfully");
+        return;
+      }
+    }
+  );
+};
+
+const sortStudent = (req, res) => {
+  res.send("NO");
+  // pool.query("SELECT * FROM students ORDER BY name", (error, results) => {
+  //   if (error) {
+  //     res.send(error);
+  //     return;
+  //   } else {
+  //     res.status(200).send(results.rows);
+  //   }
+  // });
+};
+
+module.exports = { getStudents, getStudentById, addStudent, sortStudent };
