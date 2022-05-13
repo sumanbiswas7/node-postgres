@@ -7,7 +7,7 @@ Node Js and PostgresSQL server
 - WHERE CLAUSE, AND & OR
   > "SELECT \* FROM students WHERE age = 18 AND class = 10"  
   > "SELECT \* FROM students WHERE age = 18 AND (class = 10 OR class = 12)"
-- LIMIT, OFFSET & FETCH
+- LIMIT, OFFSET
   > "SELECT \* FROM students LIMIT 10"  
   > "SELECT \* FROM students OFFSET 5 LIMIT 10"
 - IN
