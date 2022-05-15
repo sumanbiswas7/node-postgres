@@ -98,10 +98,33 @@ const updateStudent = (req, res) => {
   });
 };
 
+const deleteStudent = (req, res) => {
+  const id = req.params.id;
+
+  pool.query("SELECT * FROM students WHERE id = $1", [id], (error, results) => {
+    if (results) {
+      const resultsErr = results.rows.length;
+      if (!resultsErr) {
+        return res.status(400).send("Student with id doesn't exist");
+      }
+    } else if (error) {
+      return res.status(400).send("Student with id doesn't exist");
+    }
+    pool.query("DELETE FROM students WHERE id = $1", [id], (error, results) => {
+      if (error) {
+        return res.status(400).send(error);
+      } else {
+        res.send(`Student with id - ${id} sucessfully deleted`);
+      }
+    });
+  });
+};
+
 module.exports = {
   getStudents,
   getStudentById,
   addStudent,
   sortStudent,
   updateStudent,
+  deleteStudent,
 };
