@@ -34,23 +34,22 @@ const addStudent = (req, res) => {
     [data.name],
     (error, results) => {
       if (results.rows.length) {
-        res.status(400).end("Student already exists");
-        return;
+        return res.status(400).end("Student already exists");
       }
-    }
-  );
 
-  pool.query(
-    "INSERT INTO students (name,age,class) VALUES ($1,$2,$3)",
-    [data.name, data.age, data.class],
-    (error, results) => {
-      if (error) {
-        res.send(error);
-        return;
-      } else {
-        res.status(201).send("Person added sucessfully");
-        return;
-      }
+      pool.query(
+        "INSERT INTO students (name,age,class) VALUES ($1,$2,$3)",
+        [data.name, data.age, data.class],
+        (error, results) => {
+          if (error) {
+            res.send(error);
+            return;
+          } else {
+            res.status(201).send("Person added sucessfully");
+            return;
+          }
+        }
+      );
     }
   );
 };
@@ -70,4 +69,39 @@ const sortStudent = (req, res) => {
   // " SELECT DISTINCT name FROM students "
 };
 
-module.exports = { getStudents, getStudentById, addStudent, sortStudent };
+const updateStudent = (req, res) => {
+  const id = req.params.id;
+  const { name } = req.body;
+
+  pool.query("SELECT * FROM students WHERE id = $1", [id], (error, results) => {
+    if (results) {
+      const resultsErr = results.rows.length;
+      if (!resultsErr) {
+        return res.status(400).send("Student with id doesn't exist");
+      }
+    } else if (error) {
+      return res.status(400).send("Student with id doesn't exist");
+    }
+    pool.query(
+      "UPDATE students SET name = $1 WHERE id = $2",
+      [name, id],
+      (error, results) => {
+        if (error) {
+          res.send(error);
+          return;
+        } else {
+          res.status(201).send("Student updated sucessfully");
+          return;
+        }
+      }
+    );
+  });
+};
+
+module.exports = {
+  getStudents,
+  getStudentById,
+  addStudent,
+  sortStudent,
+  updateStudent,
+};
